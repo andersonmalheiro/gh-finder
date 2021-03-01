@@ -68,7 +68,14 @@ export const loadData = (username: string) => async (dispatch: any) => {
 
       if (repos) {
         dispatch(setLoadingRepos(false));
-        dispatch(setUserStarredRepos(repos));
+        dispatch(
+          setUserStarredRepos(
+            repos.map((repo) => {
+              repo.selected = false;
+              return repo;
+            })
+          )
+        );
       }
     }
   } catch (error) {

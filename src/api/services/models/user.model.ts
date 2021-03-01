@@ -33,6 +33,7 @@ export interface Repository {
   created_at: string;
   subscribers_count: number;
   forks: number;
+  selected?: boolean;
 }
 
 export interface Owner {

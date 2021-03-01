@@ -1,8 +1,9 @@
 import { SearchForm } from 'components/search-form';
-import { FlexColumn, FlexRow, GhostBtn } from 'styles/utils';
+import { FlexColumn, FlexRow } from 'styles/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setData,
+  setMyStarredRepos,
   setUserStarredRepos,
   userSelector,
 } from 'store/reducers/usersSlice';
@@ -14,6 +15,7 @@ import { EmptyIndicator } from 'components/empty-indicator';
 import { UserInfoCard } from 'components/user-info-card';
 import { AppButton, Drawer, RepositoryList, useDrawer } from 'components';
 import { FaCodeBranch } from 'react-icons/fa';
+import { Repository } from 'api/services/models';
 import { Grid, StyledSection, FloatingBtn } from './home.styles';
 
 const DEFAULT_CENTER = {
@@ -70,6 +72,18 @@ export const Home = () => {
 
   const [drawerOpen, toggleDrawer] = useDrawer();
 
+  const onClickRepository = (repo: Repository) => {
+    console.log(repo);
+    repo.selected = !repo.selected;
+    if (repo.selected) {
+      dispatch(setMyStarredRepos([...myStarredRepos, repo]));
+    } else {
+      dispatch(
+        setMyStarredRepos(myStarredRepos.filter((r) => r.id !== repo.id))
+      );
+    }
+  };
+
   return (
     <>
       <FloatingBtn onClick={toggleDrawer}>
@@ -120,7 +134,10 @@ export const Home = () => {
                 {loadingRepos ? (
                   <LoadingIndicator />
                 ) : userStarredRepos.length ? (
-                  <RepositoryList data={userStarredRepos} />
+                  <RepositoryList
+                    data={userStarredRepos}
+                    onClickCard={onClickRepository}
+                  />
                 ) : (
                   <EmptyIndicator message="User doesn't have starred repos..." />
                 )}
