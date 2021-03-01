@@ -1,3 +1,18 @@
+import { SearchForm } from 'components/search-form';
+import { FlexColumn, FlexRow } from 'styles/utils';
+import { useSelector } from 'react-redux';
+import { userSelector } from 'store/reducers/usersSlice';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { FaGithub } from 'react-icons/fa';
+import { MapService } from 'api';
+import { MapResult } from 'api/services/models/map.model';
+import { Map } from 'components/map';
 import {
   Grid,
   RepoCard,
@@ -5,16 +20,7 @@ import {
   StyledSection,
   UserAvatar,
   UserInfoCard,
-} from "./home.styles";
-import { SearchForm } from "components/search-form";
-import { FlexColumn, FlexRow } from "styles/utils";
-import { useSelector } from "react-redux";
-import { userSelector } from "store/reducers/usersSlice";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FaGithub } from "react-icons/fa";
-import { MapService } from "api";
-import { MapResult } from "api/services/models/map.model";
-import { Map } from "components/map";
+} from './home.styles';
 
 export const Home = () => {
   const mapService = useMemo(() => new MapService(), []);
@@ -48,8 +54,8 @@ export const Home = () => {
 
   useEffect(() => {
     if (data && detailsRef && detailsRef.current) {
-      console.log("has details view");
-      detailsRef.current.scrollIntoView({ behavior: "smooth" });
+      console.log('has details view');
+      detailsRef.current.scrollIntoView({ behavior: 'smooth' });
     }
 
     if (data) {
@@ -63,7 +69,7 @@ export const Home = () => {
         <FlexColumn
           padding="12% 0"
           margin="0 auto"
-          style={{ maxWidth: "400px" }}
+          style={{ maxWidth: '400px' }}
         >
           <small>Welcome</small>
           <h1>Search for a github user to get some cool info about it</h1>
@@ -80,12 +86,12 @@ export const Home = () => {
                 <FlexRow gap="20px">
                   <UserAvatar src={data.avatar_url} />
                   <FlexColumn>
-                    <span className="name">{data?.name || "---"}</span>
+                    <span className="name">{data?.name || '---'}</span>
                     <a href={data.html_url} className="alias">
-                      {data?.login || "---"}
+                      {data?.login || '---'}
                       <FaGithub />
                     </a>
-                    <p className="bio">{data?.bio || "No bio provided"}</p>
+                    <p className="bio">{data?.bio || 'No bio provided'}</p>
                   </FlexColumn>
                 </FlexRow>
                 <FlexRow margin="10px 0 0 0">

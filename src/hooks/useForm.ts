@@ -15,16 +15,14 @@ export const useForm = (
   const [values, setValues] = useState<GenericObject>({});
 
   const handleChange = (event: { target: any }) => {
-    const target = event.target;
+    const { target } = event;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name || target.id;
 
-    setValues((prevState: GenericObject) => {
-      return {
-        ...prevState,
-        [name]: value,
-      };
-    });
+    setValues((prevState: GenericObject) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (event: FormEvent) => {

@@ -3,11 +3,11 @@ import styled from 'styled-components';
 interface ContainerProps {
   aligment?: 'center' | 'baseline' | 'flex-end' | 'flex-start' | 'stretch';
   justify?:
-    | 'flex-end'
-    | 'flex-start'
-    | 'space-arround'
-    | 'space-between'
-    | 'center';
+  | 'flex-end'
+  | 'flex-start'
+  | 'space-arround'
+  | 'space-between'
+  | 'center';
   padding?: string;
   margin?: string;
   width?: string;
@@ -15,8 +15,10 @@ interface ContainerProps {
   gap?: string;
 }
 
+type Stylings = 'primary' | 'secondary' | 'default' | 'danger' | 'success';
+
 export interface ButtonProps {
-  styling?: 'primary' | 'secondary' | 'default' | 'danger' | 'success';
+  styling?: Stylings;
   round?: 'full' | 'rounded';
 }
 
@@ -56,22 +58,24 @@ export const Button = styled.button<ButtonProps>`
   border-radius: ${(props) => {
     if (props.round === 'full') {
       return '30px';
-    } else {
-      return '12px';
     }
+    return '12px';
   }};
   background: ${(props) => {
     const { styling } = props;
-    if (styling === 'success') {
-      return '#4caf50';
-    } else if (styling === 'secondary') {
-      return '#fff';
-    } else if (styling === 'danger') {
-      return '#f44336';
-    } else if (styling === 'primary') {
-      return '#393ac5';
+
+    switch (styling) {
+      case 'primary':
+        return '#393ac5';
+      case 'secondary':
+        return '#fff';
+      case 'success':
+        return '#4caf50';
+      case 'danger':
+        return '#f44336';
+      default:
+        return '#b0bec5';
     }
-    return '#b0bec5';
   }};
   transition: all 0.3s ease-in-out;
 

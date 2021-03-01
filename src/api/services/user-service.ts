@@ -1,9 +1,11 @@
 import { AxiosInstance, AxiosError } from 'axios';
-import { Repository, User } from './models';
 import { toast } from 'react-toastify';
+import { Repository, User } from './models';
 
 export class UserService {
-  constructor(private httpClient: AxiosInstance) {}
+  constructor(private httpClient: AxiosInstance) {
+    this.httpClient = httpClient;
+  }
 
   public async get(username: string): Promise<User | undefined> {
     try {

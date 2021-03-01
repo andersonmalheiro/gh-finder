@@ -1,8 +1,8 @@
-import React from "react";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import Leaflet from "leaflet";
-import pin from "assets/pin.svg";
-import { MapWrapper } from "./map.styles";
+import React from 'react';
+import { MapContainer, Marker, TileLayer } from 'react-leaflet';
+import Leaflet from 'leaflet';
+import pin from 'assets/pin.svg';
+import { MapWrapper } from './map.styles';
 
 interface MapProps {
   center: {
@@ -27,14 +27,14 @@ export const Map = (props: MapProps) => {
       <MapContainer
         center={center}
         zoom={8}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: '100%', height: '100%' }}
       >
         <TileLayer
           url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPS_KEY}`}
         />
 
         {markerPosition && (
-          <Marker icon={mapPinIcon} position={markerPosition}></Marker>
+          <Marker icon={mapPinIcon} position={markerPosition} />
         )}
       </MapContainer>
     </MapWrapper>

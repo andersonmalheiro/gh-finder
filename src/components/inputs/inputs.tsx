@@ -44,7 +44,7 @@ export const Input = (props: InputProps) => {
       {label && <StyledLabel htmlFor={id}>{label}</StyledLabel>}
       <StyledInput
         id={id}
-        type={type ? type : 'text'}
+        type={type || 'text'}
         value={value || ''}
         {...rest}
       />

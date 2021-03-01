@@ -30,7 +30,7 @@ export const SearchForm = () => {
           placeholder="Github username..."
         />
         <AppButton
-          text={'Search'}
+          text="Search"
           type="submit"
           styling="primary"
           disabled={!values.username}

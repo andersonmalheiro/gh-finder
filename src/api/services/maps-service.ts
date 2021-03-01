@@ -12,5 +12,7 @@ export class MapService {
     } catch (error) {
       return error;
     }
+
+    return undefined;
   }
 }

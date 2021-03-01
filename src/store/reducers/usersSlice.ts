@@ -1,7 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { httpClient, UserService } from "api";
-import { Repository, User } from "api/services/models";
-import { AxiosError } from "axios";
+import { createSlice } from '@reduxjs/toolkit';
+import { httpClient, UserService } from 'api';
+import { Repository, User } from 'api/services/models';
 
 const userService = new UserService(httpClient);
 
@@ -21,7 +20,7 @@ const initialState: UserListState = {
 
 // User slice
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     setData: (state, action) => {
@@ -48,30 +47,28 @@ export const {
 } = userSlice.actions;
 
 // Async thunk to load data
-export const loadData = (username: string) => {
-  return async (dispatch: any) => {
-    try {
-      dispatch(setLoading(true));
+export const loadData = (username: string) => async (dispatch: any) => {
+  try {
+    dispatch(setLoading(true));
 
-      const [user, repos] = await Promise.allSettled([
-        userService.get(username),
-        userService.getStarredRepos(username),
-      ]);
+    const [user, repos] = await Promise.allSettled([
+      userService.get(username),
+      userService.getStarredRepos(username),
+    ]);
 
-      dispatch(setLoading(false));
+    dispatch(setLoading(false));
 
-      if (user && user.status === "fulfilled") {
-        dispatch(setData(user.value));
-      }
-
-      if (repos && repos.status === "fulfilled") {
-        dispatch(setUserStarredRepos(repos.value));
-      }
-    } catch (error) {
-      dispatch(setLoading(false));
-      dispatch(setData(undefined));
+    if (user && user.status === 'fulfilled') {
+      dispatch(setData(user.value));
     }
-  };
+
+    if (repos && repos.status === 'fulfilled') {
+      dispatch(setUserStarredRepos(repos.value));
+    }
+  } catch (error) {
+    dispatch(setLoading(false));
+    dispatch(setData(undefined));
+  }
 };
 
 // Selector
