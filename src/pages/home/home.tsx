@@ -1,27 +1,20 @@
 import { SearchForm } from 'components/search-form';
-import { FlexColumn, FlexRow } from 'styles/utils';
+import { FlexColumn, FlexRow, GhostBtn } from 'styles/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setData,
   setUserStarredRepos,
   userSelector,
 } from 'store/reducers/usersSlice';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapService } from 'api';
 import { MapResult } from 'api/services/models/map.model';
 import { LoadingIndicator } from 'components/loading-indicator';
 import { EmptyIndicator } from 'components/empty-indicator';
 import { UserInfoCard } from 'components/user-info-card';
-import { AppButton } from 'components';
-import { FaCodeBranch, FaEye } from 'react-icons/fa';
-import { MdStar } from 'react-icons/md';
-import { Grid, RepoCard, RepoGrid, StyledSection } from './home.styles';
+import { AppButton, Drawer, RepositoryList, useDrawer } from 'components';
+import { FaCodeBranch } from 'react-icons/fa';
+import { Grid, StyledSection, FloatingBtn } from './home.styles';
 
 const DEFAULT_CENTER = {
   lat: -13.7058372,
@@ -31,8 +24,9 @@ const DEFAULT_CENTER = {
 export const Home = () => {
   const mapService = useMemo(() => new MapService(), []);
   const dispatch = useDispatch();
-  const { data, userStarredRepos, loadingRepos } = useSelector(userSelector);
-  const detailsRef = useRef<HTMLDivElement>(null);
+  const { data, loadingRepos, myStarredRepos, userStarredRepos } = useSelector(
+    userSelector
+  );
   const [mapCenter, setMapCenter] = useState(DEFAULT_CENTER);
   const [userPin, setUserPin] = useState<[number, number] | undefined>(
     undefined
@@ -61,10 +55,6 @@ export const Home = () => {
   );
 
   useEffect(() => {
-    // if (data && detailsRef && detailsRef.current) {
-    //   detailsRef.current.scrollIntoView({ behavior: 'smooth' });
-    // }
-
     if (data) {
       loadUserLocation(data.location);
       setFormInline(true);
@@ -78,8 +68,14 @@ export const Home = () => {
     dispatch(setUserStarredRepos([]));
   };
 
+  const [drawerOpen, toggleDrawer] = useDrawer();
+
   return (
-    <div>
+    <>
+      <FloatingBtn onClick={toggleDrawer}>
+        <FaCodeBranch color="#fff" size={20} />
+        <span className="text">My fav repos</span>
+      </FloatingBtn>
       <StyledSection id="main">
         {formInline ? (
           <FlexRow gap="1em">
@@ -124,49 +120,7 @@ export const Home = () => {
                 {loadingRepos ? (
                   <LoadingIndicator />
                 ) : userStarredRepos.length ? (
-                  <RepoGrid>
-                    {userStarredRepos.map((repo) => (
-                      <RepoCard key={repo.id}>
-                        <FlexColumn justify="space-between">
-                          <a
-                            style={{ textDecoration: 'none', color: '#000' }}
-                            href={repo.html_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="title"
-                          >
-                            {repo.full_name}
-                          </a>
-                          <FlexRow gap="1em">
-                            <FlexRow aligment="center">
-                              <FaCodeBranch color="#00000099" />
-                              <small
-                                style={{ marginLeft: '5px', color: '#393ac5' }}
-                              >
-                                {repo.forks_count}
-                              </small>
-                            </FlexRow>
-                            <FlexRow aligment="center">
-                              <MdStar color="#00000099" />
-                              <small
-                                style={{ marginLeft: '5px', color: '#393ac5' }}
-                              >
-                                {repo.stargazers_count}
-                              </small>
-                            </FlexRow>
-                            <FlexRow aligment="center">
-                              <FaEye color="#00000099" />
-                              <small
-                                style={{ marginLeft: '5px', color: '#393ac5' }}
-                              >
-                                {repo.watchers_count}
-                              </small>
-                            </FlexRow>
-                          </FlexRow>
-                        </FlexColumn>
-                      </RepoCard>
-                    ))}
-                  </RepoGrid>
+                  <RepositoryList data={userStarredRepos} />
                 ) : (
                   <EmptyIndicator message="User doesn't have starred repos..." />
                 )}
@@ -175,6 +129,14 @@ export const Home = () => {
           </FlexColumn>
         )}
       </StyledSection>
-    </div>
+
+      <Drawer
+        toggleDrawer={toggleDrawer}
+        title="My fav repos"
+        open={drawerOpen}
+      >
+        <RepositoryList data={myStarredRepos} />
+      </Drawer>
+    </>
   );
 };
