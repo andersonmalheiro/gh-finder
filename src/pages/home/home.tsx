@@ -1,7 +1,11 @@
 import { SearchForm } from 'components/search-form';
 import { FlexColumn, FlexRow } from 'styles/utils';
-import { useSelector } from 'react-redux';
-import { userSelector } from 'store/reducers/usersSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setData,
+  setUserStarredRepos,
+  userSelector,
+} from 'store/reducers/usersSlice';
 import React, {
   useCallback,
   useEffect,
@@ -9,36 +13,35 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { FaGithub } from 'react-icons/fa';
 import { MapService } from 'api';
 import { MapResult } from 'api/services/models/map.model';
-import { Map } from 'components/map';
 import { LoadingIndicator } from 'components/loading-indicator';
 import { EmptyIndicator } from 'components/empty-indicator';
-import {
-  Grid,
-  RepoCard,
-  RepoGrid,
-  StyledSection,
-  UserAvatar,
-  UserInfoCard,
-} from './home.styles';
+import { UserInfoCard } from 'components/user-info-card';
+import { AppButton } from 'components';
+import { Grid, RepoCard, RepoGrid, StyledSection } from './home.styles';
+
+const DEFAULT_CENTER = {
+  lat: -13.7058372,
+  lng: -69.6466876,
+};
 
 export const Home = () => {
   const mapService = useMemo(() => new MapService(), []);
-
+  const dispatch = useDispatch();
   const { data, userStarredRepos, loadingRepos } = useSelector(userSelector);
   const detailsRef = useRef<HTMLDivElement>(null);
-  const [mapCenter, setMapCenter] = useState({
-    lat: -13.7058372,
-    lng: -69.6466876,
-  });
+  const [mapCenter, setMapCenter] = useState(DEFAULT_CENTER);
   const [userPin, setUserPin] = useState<[number, number] | undefined>(
     undefined
   );
+  const [formInline, setFormInline] = useState(false);
 
   const loadUserLocation = useCallback(
     async (place: string) => {
+      setMapCenter(DEFAULT_CENTER);
+      setUserPin(undefined);
+
       try {
         const res: MapResult[] = await mapService.fetchMapBox(place);
         if (res && res.length) {
@@ -48,73 +51,67 @@ export const Home = () => {
           setUserPin([y, x]);
         }
       } catch (error) {
-        console.error(error);
+        setMapCenter(DEFAULT_CENTER);
+        setUserPin(undefined);
       }
     },
     [mapService]
   );
 
   useEffect(() => {
-    if (data && detailsRef && detailsRef.current) {
-      console.log('has details view');
-      detailsRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    // if (data && detailsRef && detailsRef.current) {
+    //   detailsRef.current.scrollIntoView({ behavior: 'smooth' });
+    // }
 
     if (data) {
       loadUserLocation(data.location);
+      setFormInline(true);
+    } else {
+      setFormInline(false);
     }
   }, [data, loadUserLocation]);
+
+  const clear = () => {
+    dispatch(setData(undefined));
+    dispatch(setUserStarredRepos([]));
+  };
 
   return (
     <div>
       <StyledSection id="main">
-        <FlexColumn
-          padding="12% 0"
-          margin="0 auto"
-          style={{ maxWidth: '400px' }}
-        >
-          <small>Welcome</small>
-          <h1>Search for a github user to get some cool info about it</h1>
-          <SearchForm />
-        </FlexColumn>
-      </StyledSection>
+        {formInline ? (
+          <FlexRow gap="1em">
+            <SearchForm inline={formInline} />
+            {data && (
+              <AppButton
+                onClick={clear}
+                text="Clear search"
+                styling="default"
+              />
+            )}
+          </FlexRow>
+        ) : (
+          <FlexColumn
+            padding="12% 0"
+            margin="0 auto"
+            style={{ maxWidth: '400px' }}
+          >
+            <small>Welcome</small>
+            <h1>Search for a github user to get some cool info about it</h1>
+            <SearchForm inline={formInline} />
+          </FlexColumn>
+        )}
 
-      {data && (
-        <StyledSection ref={detailsRef} id="details">
+        {data && (
           <FlexColumn>
             <h1>User details</h1>
             <Grid>
-              <UserInfoCard>
-                <FlexRow gap="20px">
-                  <UserAvatar src={data.avatar_url} />
-                  <FlexColumn>
-                    <span className="name">{data?.name || '---'}</span>
-                    <a href={data.html_url} className="alias">
-                      {data?.login || '---'}
-                      <FaGithub />
-                    </a>
-                    <p className="bio">{data?.bio || 'No bio provided'}</p>
-                  </FlexColumn>
-                </FlexRow>
-                <FlexRow margin="10px 0 0 0">
-                  <div className="stats-box">
-                    <div className="stat">
-                      <small>Followers</small>
-                      <span>{data.followers}</span>
-                    </div>
-                    <div className="stat">
-                      <small>Following</small>
-                      <span>{data.following}</span>
-                    </div>
-                    <div className="stat">
-                      <small>Public repos</small>
-                      <span>{data.public_repos}</span>
-                    </div>
-                  </div>
-                </FlexRow>
+              <UserInfoCard
+                data={data}
+                mapCenter={mapCenter}
+                userPin={userPin}
+              />
 
-                <Map center={mapCenter} markerPosition={userPin} />
-              </UserInfoCard>
               <FlexColumn width="100%" style={{ flex: 1 }}>
                 {loadingRepos ? (
                   <LoadingIndicator />
@@ -132,8 +129,8 @@ export const Home = () => {
               </FlexColumn>
             </Grid>
           </FlexColumn>
-        </StyledSection>
-      )}
+        )}
+      </StyledSection>
     </div>
   );
 };

@@ -1,13 +1,18 @@
 import React from 'react';
 import { AppButton } from 'components/button';
-import { FlexColumn } from 'styles/utils';
+import { FlexColumn, FlexRow } from 'styles/utils';
 import { Form } from 'components/form';
 import { Input } from 'components/inputs';
 import { useForm } from 'hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadData, userSelector } from 'store/reducers/usersSlice';
 
-export const SearchForm = () => {
+interface SearchFormProps {
+  inline?: boolean;
+}
+
+export const SearchForm = (props: SearchFormProps = { inline: false }) => {
+  const { inline } = props;
   const dispatch = useDispatch();
   const { loading } = useSelector(userSelector);
 
@@ -20,23 +25,43 @@ export const SearchForm = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FlexColumn gap="1.5em">
-        <Input
-          id="username"
-          name="username"
-          type="text"
-          value={values.username || ''}
-          onChange={handleChange}
-          placeholder="Github username..."
-        />
-        <AppButton
-          text="Search"
-          type="submit"
-          styling="primary"
-          disabled={!values.username}
-          loading={loading}
-        />
-      </FlexColumn>
+      {inline ? (
+        <FlexRow gap="10px">
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            value={values.username || ''}
+            onChange={handleChange}
+            placeholder="Github username..."
+          />
+          <AppButton
+            text="Search"
+            type="submit"
+            styling="primary"
+            disabled={!values.username}
+            loading={loading}
+          />
+        </FlexRow>
+      ) : (
+        <FlexColumn gap="1.5em">
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            value={values.username || ''}
+            onChange={handleChange}
+            placeholder="Github username..."
+          />
+          <AppButton
+            text="Search"
+            type="submit"
+            styling="primary"
+            disabled={!values.username}
+            loading={loading}
+          />
+        </FlexColumn>
+      )}
     </Form>
   );
 };

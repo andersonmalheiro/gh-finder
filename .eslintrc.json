@@ -47,7 +47,8 @@
     "prettier/prettier": "warn",
     "react/jsx-indent": "off",
     "no-nested-ternary": "off",
-    "operator-linebreak": "off"
+    "operator-linebreak": "off",
+    "react/no-unused-prop-types": "off"
   },
   "settings": {
     "import/resolver": {
