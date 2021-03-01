@@ -13,6 +13,8 @@ import { FaGithub } from 'react-icons/fa';
 import { MapService } from 'api';
 import { MapResult } from 'api/services/models/map.model';
 import { Map } from 'components/map';
+import { LoadingIndicator } from 'components/loading-indicator';
+import { EmptyIndicator } from 'components/empty-indicator';
 import {
   Grid,
   RepoCard,
@@ -25,7 +27,7 @@ import {
 export const Home = () => {
   const mapService = useMemo(() => new MapService(), []);
 
-  const { data, userStarredRepos } = useSelector(userSelector);
+  const { data, userStarredRepos, loadingRepos } = useSelector(userSelector);
   const detailsRef = useRef<HTMLDivElement>(null);
   const [mapCenter, setMapCenter] = useState({
     lat: -13.7058372,
@@ -113,15 +115,21 @@ export const Home = () => {
 
                 <Map center={mapCenter} markerPosition={userPin} />
               </UserInfoCard>
-              <div>
-                <RepoGrid>
-                  {userStarredRepos.map((repo) => (
-                    <RepoCard key={repo.id}>
-                      <span className="title">{repo.full_name}</span>
-                    </RepoCard>
-                  ))}
-                </RepoGrid>
-              </div>
+              <FlexColumn width="100%" style={{ flex: 1 }}>
+                {loadingRepos ? (
+                  <LoadingIndicator />
+                ) : userStarredRepos.length ? (
+                  <RepoGrid>
+                    {userStarredRepos.map((repo) => (
+                      <RepoCard key={repo.id}>
+                        <span className="title">{repo.full_name}</span>
+                      </RepoCard>
+                    ))}
+                  </RepoGrid>
+                ) : (
+                  <EmptyIndicator message="User doesn't have starred repos..." />
+                )}
+              </FlexColumn>
             </Grid>
           </FlexColumn>
         </StyledSection>

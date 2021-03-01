@@ -3,11 +3,11 @@ import styled from 'styled-components';
 interface ContainerProps {
   aligment?: 'center' | 'baseline' | 'flex-end' | 'flex-start' | 'stretch';
   justify?:
-  | 'flex-end'
-  | 'flex-start'
-  | 'space-arround'
-  | 'space-between'
-  | 'center';
+    | 'flex-end'
+    | 'flex-start'
+    | 'space-arround'
+    | 'space-between'
+    | 'center';
   padding?: string;
   margin?: string;
   width?: string;
