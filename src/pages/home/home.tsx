@@ -19,6 +19,8 @@ import { LoadingIndicator } from 'components/loading-indicator';
 import { EmptyIndicator } from 'components/empty-indicator';
 import { UserInfoCard } from 'components/user-info-card';
 import { AppButton } from 'components';
+import { FaCodeBranch, FaEye } from 'react-icons/fa';
+import { MdStar } from 'react-icons/md';
 import { Grid, RepoCard, RepoGrid, StyledSection } from './home.styles';
 
 const DEFAULT_CENTER = {
@@ -87,6 +89,12 @@ export const Home = () => {
                 onClick={clear}
                 text="Clear search"
                 styling="default"
+                style={{
+                  border: '1px solid #393ac5',
+                  background: '#fff',
+                  color: '#393ac5',
+                  boxShadow: '0 3px 10px 1px #393ac521',
+                }}
               />
             )}
           </FlexRow>
@@ -119,7 +127,43 @@ export const Home = () => {
                   <RepoGrid>
                     {userStarredRepos.map((repo) => (
                       <RepoCard key={repo.id}>
-                        <span className="title">{repo.full_name}</span>
+                        <FlexColumn justify="space-between">
+                          <a
+                            style={{ textDecoration: 'none', color: '#000' }}
+                            href={repo.html_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="title"
+                          >
+                            {repo.full_name}
+                          </a>
+                          <FlexRow gap="1em">
+                            <FlexRow aligment="center">
+                              <FaCodeBranch color="#00000099" />
+                              <small
+                                style={{ marginLeft: '5px', color: '#393ac5' }}
+                              >
+                                {repo.forks_count}
+                              </small>
+                            </FlexRow>
+                            <FlexRow aligment="center">
+                              <MdStar color="#00000099" />
+                              <small
+                                style={{ marginLeft: '5px', color: '#393ac5' }}
+                              >
+                                {repo.stargazers_count}
+                              </small>
+                            </FlexRow>
+                            <FlexRow aligment="center">
+                              <FaEye color="#00000099" />
+                              <small
+                                style={{ marginLeft: '5px', color: '#393ac5' }}
+                              >
+                                {repo.watchers_count}
+                              </small>
+                            </FlexRow>
+                          </FlexRow>
+                        </FlexColumn>
                       </RepoCard>
                     ))}
                   </RepoGrid>
