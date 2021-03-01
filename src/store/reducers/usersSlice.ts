@@ -7,6 +7,7 @@ const userService = new UserService(httpClient);
 export interface UserListState {
   data?: User;
   loading: boolean;
+  loadingRepos: boolean;
   myStarredRepos: Repository[];
   userStarredRepos: Repository[];
 }
@@ -14,6 +15,7 @@ export interface UserListState {
 const initialState: UserListState = {
   data: undefined,
   loading: false,
+  loadingRepos: false,
   myStarredRepos: [],
   userStarredRepos: [],
 };
@@ -29,6 +31,9 @@ export const userSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
+    setLoadingRepos: (state, action) => {
+      state.loadingRepos = action.payload;
+    },
     setUserStarredRepos: (state, action) => {
       state.userStarredRepos = action.payload;
     },
@@ -42,6 +47,7 @@ export const userSlice = createSlice({
 export const {
   setData,
   setLoading,
+  setLoadingRepos,
   setUserStarredRepos,
   setMyStarredRepos,
 } = userSlice.actions;
@@ -51,23 +57,25 @@ export const loadData = (username: string) => async (dispatch: any) => {
   try {
     dispatch(setLoading(true));
 
-    const [user, repos] = await Promise.allSettled([
-      userService.get(username),
-      userService.getStarredRepos(username),
-    ]);
+    const user = await userService.get(username);
 
-    dispatch(setLoading(false));
+    if (user) {
+      dispatch(setLoading(false));
+      dispatch(setData(user));
 
-    if (user && user.status === 'fulfilled') {
-      dispatch(setData(user.value));
-    }
+      dispatch(setLoadingRepos(true));
+      const repos = await userService.getStarredRepos(username);
 
-    if (repos && repos.status === 'fulfilled') {
-      dispatch(setUserStarredRepos(repos.value));
+      if (repos) {
+        dispatch(setLoadingRepos(false));
+        dispatch(setUserStarredRepos(repos));
+      }
     }
   } catch (error) {
     dispatch(setLoading(false));
+    dispatch(setLoadingRepos(false));
     dispatch(setData(undefined));
+    dispatch(setUserStarredRepos([]));
   }
 };
 
