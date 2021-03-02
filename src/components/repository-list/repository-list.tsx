@@ -4,7 +4,7 @@ import { MdStar } from 'react-icons/md';
 import { FaCodeBranch, FaEye, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FlexColumn, FlexRow } from 'styles/utils';
 import { EmptyIndicator } from 'components/empty-indicator';
-import { RepoCard, RepoGrid } from './repository-list.styles';
+import { LikeButton, RepoCard, RepoGrid } from './repository-list.styles';
 
 interface RepositoryListProps {
   data: Repository[];
@@ -52,22 +52,31 @@ export const RepositoryList = (props: RepositoryListProps) => {
                 </FlexRow>
               </FlexColumn>
               {showFav && (
-                <FlexColumn>
+                <>
                   {repo.selected ? (
-                    <FaHeart
+                    <LikeButton
                       data-testid="like_button"
-                      color="#f44336"
-                      style={{ cursor: 'pointer' }}
                       onClick={onClickCard ? () => onClickCard(repo) : () => {}}
-                    />
+                    >
+                      <FaHeart
+                        title="Dislike repository"
+                        color="#393ac5"
+                        style={{ cursor: 'pointer' }}
+                      />
+                    </LikeButton>
                   ) : (
-                    <FaRegHeart
+                    <LikeButton
                       data-testid="like_button"
-                      style={{ cursor: 'pointer' }}
                       onClick={onClickCard ? () => onClickCard(repo) : () => {}}
-                    />
+                    >
+                      <FaRegHeart
+                        title="Like repository"
+                        color="#393ac5"
+                        style={{ cursor: 'pointer' }}
+                      />
+                    </LikeButton>
                   )}
-                </FlexColumn>
+                </>
               )}
             </FlexRow>
           </RepoCard>
