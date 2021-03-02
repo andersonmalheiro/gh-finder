@@ -3,7 +3,7 @@
 context('Repository interations', () => {
   beforeEach(() => {
     cy.restoreLocalStorage();
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
   });
 
   afterEach(() => {
@@ -25,15 +25,14 @@ context('Repository interations', () => {
     cy.wait(1000);
 
     cy.wait('@api').then(() => {
-      cy.get(':nth-child(1) > .dXyeDi > [data-testid=like_button]').click();
+      cy.get('[data-testid=user_favs_docker-ng-cli-karma]').click();
 
       cy.wait(1000);
 
       cy.get('[data-testid=toggle_drawer]').click();
 
-      cy.get(
-        '[data-testid=drawer] > .sc-fodVxV > .sc-fFubgz > .dXyeDi > .bHklPO > .title'
-      ).should('have.text', 'trion-development/docker-ng-cli-karma');
+      cy.get('[data-testid=my_favs_title_docker-ng-cli-karma]')
+        .should('have.text', 'trion-development/docker-ng-cli-karma');
 
       cy.window()
         .then(win => {
@@ -53,13 +52,12 @@ context('Repository interations', () => {
   it('should dislike a repository', () => {
     cy.get('[data-testid=toggle_drawer]').click();
 
-    cy.get(
-      '[data-testid=drawer] > .sc-fodVxV > .sc-fFubgz > .dXyeDi > .bHklPO > .title'
-    ).should('have.text', 'trion-development/docker-ng-cli-karma');
+    cy.get('[data-testid=my_favs_title_docker-ng-cli-karma]')
+      .should('have.text', 'trion-development/docker-ng-cli-karma');
 
     cy.wait(1000);
 
-    cy.get('[data-testid=like_button]').click();
+    cy.get('[data-testid=my_favs_docker-ng-cli-karma]').click();
 
     cy.window()
       .then(win => {
