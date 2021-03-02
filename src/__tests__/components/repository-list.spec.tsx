@@ -39,9 +39,14 @@ describe('RepositoryList', () => {
       },
     ];
     const { getByTestId } = render(
-      <RepositoryList showFav onClickCard={onClick} data={data} />
+      <RepositoryList
+        showFav
+        onClickCard={onClick}
+        data={data}
+        testId="user_favs_"
+      />
     );
-    const likeButton = getByTestId('like_button');
+    const likeButton = getByTestId('user_favs_test');
     fireEvent.click(likeButton);
 
     expect(onClick).toBeCalledTimes(1);
