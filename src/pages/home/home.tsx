@@ -152,6 +152,7 @@ export const Home = () => {
                     data={userStarredRepos}
                     onClickCard={onClickRepository}
                     showFav
+                    testId="user_favs_"
                   />
                 ) : (
                   <EmptyIndicator message="User doesn't have starred repos..." />
@@ -171,6 +172,7 @@ export const Home = () => {
           showFav
           onClickCard={removeLike}
           data={myStarredRepos}
+          testId="my_favs_"
         />
       </Drawer>
     </>

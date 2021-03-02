@@ -10,10 +10,11 @@ interface RepositoryListProps {
   data: Repository[];
   showFav: boolean;
   onClickCard?: (repo: Repository) => void;
+  testId?: string;
 }
 
 export const RepositoryList = (props: RepositoryListProps) => {
-  const { data, showFav, onClickCard } = props;
+  const { data, showFav, onClickCard, testId } = props;
   return (
     <RepoGrid>
       {data && data?.length ? (
@@ -27,6 +28,7 @@ export const RepositoryList = (props: RepositoryListProps) => {
                   target="_blank"
                   rel="noreferrer"
                   className="title"
+                  data-testid={`${testId}title_${repo.name}`}
                 >
                   {repo.full_name}
                 </a>
@@ -55,7 +57,7 @@ export const RepositoryList = (props: RepositoryListProps) => {
                 <>
                   {repo.selected ? (
                     <LikeButton
-                      data-testid="like_button"
+                      data-testid={testId + repo.name}
                       onClick={onClickCard ? () => onClickCard(repo) : () => {}}
                     >
                       <FaHeart
@@ -66,7 +68,7 @@ export const RepositoryList = (props: RepositoryListProps) => {
                     </LikeButton>
                   ) : (
                     <LikeButton
-                      data-testid="like_button"
+                      data-testid={testId + repo.name}
                       onClick={onClickCard ? () => onClickCard(repo) : () => {}}
                     >
                       <FaRegHeart
