@@ -10,7 +10,7 @@ export const RepoGrid = styled.ul`
   max-height: 70vh;
   overflow: hidden;
   overflow-y: auto;
-  padding: 0 5px;
+  padding: 5px;
 `;
 
 export const RepoCard = styled.li`

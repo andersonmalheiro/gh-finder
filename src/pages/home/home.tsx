@@ -3,9 +3,11 @@ import { FlexColumn, FlexRow } from 'styles/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setData,
-  setMyStarredRepos,
   setUserStarredRepos,
   userSelector,
+  likeRepo,
+  dislikeRepo,
+  setMyStarredRepos,
 } from 'store/reducers/usersSlice';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { MapService } from 'api';
@@ -14,7 +16,7 @@ import { LoadingIndicator } from 'components/loading-indicator';
 import { EmptyIndicator } from 'components/empty-indicator';
 import { UserInfoCard } from 'components/user-info-card';
 import { AppButton, Drawer, RepositoryList, useDrawer } from 'components';
-import { FaCodeBranch } from 'react-icons/fa';
+import { FaCodeBranch, FaTrash } from 'react-icons/fa';
 import { Repository } from 'api/services/models';
 import { Grid, StyledSection, FloatingBtn } from './home.styles';
 
@@ -26,15 +28,17 @@ const DEFAULT_CENTER = {
 export const Home = () => {
   const mapService = useMemo(() => new MapService(), []);
   const dispatch = useDispatch();
+  const [mapCenter, setMapCenter] = useState(DEFAULT_CENTER);
+  const [formInline, setFormInline] = useState(false);
   const { data, loadingRepos, myStarredRepos, userStarredRepos } = useSelector(
     userSelector
   );
-  const [mapCenter, setMapCenter] = useState(DEFAULT_CENTER);
   const [userPin, setUserPin] = useState<[number, number] | undefined>(
     undefined
   );
-  const [formInline, setFormInline] = useState(false);
+  const [drawerOpen, toggleDrawer] = useDrawer();
 
+  // ------ Methods ------
   const loadUserLocation = useCallback(
     async (place: string) => {
       setMapCenter(DEFAULT_CENTER);
@@ -56,6 +60,25 @@ export const Home = () => {
     [mapService]
   );
 
+  const clear = () => {
+    dispatch(setData(undefined));
+    dispatch(setUserStarredRepos([]));
+  };
+
+  const onClickRepository = (repo: Repository) => {
+    if (repo.selected) {
+      dispatch(dislikeRepo(repo));
+    } else {
+      dispatch(likeRepo(repo));
+    }
+  };
+
+  const removeLike = (repo: Repository) => {
+    dispatch(dislikeRepo(repo));
+  };
+  // ------ Methods ------
+
+  // ------ Effects ------
   useEffect(() => {
     if (data) {
       loadUserLocation(data.location);
@@ -65,24 +88,14 @@ export const Home = () => {
     }
   }, [data, loadUserLocation]);
 
-  const clear = () => {
-    dispatch(setData(undefined));
-    dispatch(setUserStarredRepos([]));
-  };
-
-  const [drawerOpen, toggleDrawer] = useDrawer();
-
-  const onClickRepository = (repo: Repository) => {
-    console.log(repo);
-    repo.selected = !repo.selected;
-    if (repo.selected) {
-      dispatch(setMyStarredRepos([...myStarredRepos, repo]));
-    } else {
-      dispatch(
-        setMyStarredRepos(myStarredRepos.filter((r) => r.id !== repo.id))
-      );
+  useEffect(() => {
+    const likedRepos = localStorage.getItem('liked_repos');
+    if (likedRepos) {
+      const parsed = JSON.parse(likedRepos) as Array<Repository>;
+      dispatch(setMyStarredRepos(parsed));
     }
-  };
+  }, []);
+  // ------ Effects ------
 
   return (
     <>
@@ -92,15 +105,15 @@ export const Home = () => {
       </FloatingBtn>
       <StyledSection id="main">
         {formInline ? (
-          <FlexRow gap="1em">
+          <FlexRow gap="1em" aligment="center">
             <SearchForm inline={formInline} />
             {data && (
               <AppButton
                 onClick={clear}
                 text="Clear search"
+                icon={<FaTrash color="#393ac5" size={15} />}
                 styling="default"
                 style={{
-                  border: '1px solid #393ac5',
                   background: '#fff',
                   color: '#393ac5',
                   boxShadow: '0 3px 10px 1px #393ac521',
@@ -137,6 +150,7 @@ export const Home = () => {
                   <RepositoryList
                     data={userStarredRepos}
                     onClickCard={onClickRepository}
+                    showFav
                   />
                 ) : (
                   <EmptyIndicator message="User doesn't have starred repos..." />
@@ -152,7 +166,11 @@ export const Home = () => {
         title="My fav repos"
         open={drawerOpen}
       >
-        <RepositoryList data={myStarredRepos} />
+        <RepositoryList
+          showFav
+          onClickCard={removeLike}
+          data={myStarredRepos}
+        />
       </Drawer>
     </>
   );

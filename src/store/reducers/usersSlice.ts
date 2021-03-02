@@ -40,6 +40,38 @@ export const userSlice = createSlice({
     setMyStarredRepos: (state, action) => {
       state.myStarredRepos = action.payload;
     },
+    likeRepo: (state, action) => {
+      const favIds = state.myStarredRepos.map((r) => r.id);
+      if (!favIds.includes(action.payload.id)) {
+        state.myStarredRepos = [...state.myStarredRepos, action.payload];
+        state.userStarredRepos = state.userStarredRepos.map((repo) => {
+          if (repo.id === action.payload.id) {
+            repo.selected = true;
+          }
+
+          return { ...repo };
+        });
+        localStorage.setItem(
+          'liked_repos',
+          JSON.stringify(state.myStarredRepos)
+        );
+      }
+    },
+    dislikeRepo: (state, action) => {
+      state.myStarredRepos = state.myStarredRepos.filter(
+        (repo) => repo.id !== action.payload.id
+      );
+
+      state.userStarredRepos = state.userStarredRepos.map((repo) => {
+        if (repo.id === action.payload.id) {
+          repo.selected = false;
+        }
+
+        return { ...repo };
+      });
+
+      localStorage.setItem('liked_repos', JSON.stringify(state.myStarredRepos));
+    },
   },
 });
 
@@ -50,6 +82,8 @@ export const {
   setLoadingRepos,
   setUserStarredRepos,
   setMyStarredRepos,
+  likeRepo,
+  dislikeRepo,
 } = userSlice.actions;
 
 // Async thunk to load data
@@ -67,15 +101,26 @@ export const loadData = (username: string) => async (dispatch: any) => {
       const repos = await userService.getStarredRepos(username);
 
       if (repos) {
-        dispatch(setLoadingRepos(false));
-        dispatch(
-          setUserStarredRepos(
-            repos.map((repo) => {
-              repo.selected = false;
+        let formatedRepos: Repository[] = [];
+
+        const likedRepos = localStorage.getItem('liked_repos');
+        if (likedRepos) {
+          const parsed = JSON.parse(likedRepos) as Array<Repository>;
+          if (parsed.length) {
+            const ids = parsed.map((repo) => repo.id);
+            formatedRepos = repos.map((repo) => {
+              repo.selected = ids.includes(repo.id);
               return repo;
-            })
-          )
-        );
+            });
+          } else {
+            formatedRepos = repos;
+          }
+        } else {
+          formatedRepos = repos;
+        }
+
+        dispatch(setLoadingRepos(false));
+        dispatch(setUserStarredRepos(formatedRepos));
       }
     }
   } catch (error) {
