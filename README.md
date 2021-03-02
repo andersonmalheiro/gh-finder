@@ -29,7 +29,6 @@ yarn
 Antes de executar o projeto, crie na raiz dele um arquivo `.env.local` e adicione as seguintes variáveis de ambiente:
 
 ```
-## Chaves da API da Marvel
 REACT_APP_GITHUB_KEY=<chave do Github>
 REACT_APP_MAPS_KEY=<chave do Mapbox>
 ```
@@ -63,6 +62,15 @@ Para executar os testes unitários, utilize os seguintes comandos:
 npm run test
 # ou
 yarn test
+```
+## Testes E2E
+
+Para executar os testes E2E é necessário que a aplicação esteja sendo executada. Tendo isso em mente, utilize os seguintes comandos para executar os testes:
+
+```bash
+npm run cypress:run
+# ou
+yarn cypress:run
 ```
 
 ## Docker
