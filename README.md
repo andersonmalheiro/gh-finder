@@ -1,4 +1,4 @@
-# Github Finder.
+# Github Finder
 
 Encontre usuários do Github.
 
@@ -12,7 +12,8 @@ Projeto criado utilizando:
 - React Leaflet + Mapbox;
 - Redux Toolkit;
 - Testes com Jest;
-- Docker.
+- Docker;
+- SemaphoreCI - [![Build Status](https://andersonmalheiro.semaphoreci.com/badges/gh-finder/branches/master.svg)](https://andersonmalheiro.semaphoreci.com/projects/gh-finder)
 
 ## Instruções
 Instruções de como executar o projeto:
