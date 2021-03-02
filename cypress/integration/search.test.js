@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('Comics', () => {
+context('Search user', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000');
   });
