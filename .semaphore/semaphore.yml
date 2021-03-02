@@ -1,13 +1,40 @@
 version: v1.0
-name: Initial Pipeline
+name: GH Finder
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: 'Block #1'
+  - name: Install dependencies
     task:
       jobs:
-        - name: 'Job #1'
+        - name: install client dependencies
           commands:
             - checkout
+            - cache restore
+            - yarn install
+            - cache store
+  - name: Lint
+    task:
+      jobs:
+        - name: lint client
+          commands:
+            - checkout
+            - cache restore
+            - yarn lint
+  - name: Tests
+    task:
+      jobs:
+        - name: client tests
+          commands:
+            - checkout
+            - cache restore
+            - yarn test
+  - name: Build
+    task:
+      jobs:
+        - name: build client
+          commands:
+            - checkout
+            - cache restore
+            - npm run build
