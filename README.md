@@ -13,7 +13,7 @@ Projeto criado utilizando:
 - Redux Toolkit;
 - Testes com Jest;
 - Docker;
-- SemaphoreCI - [![Build Status](https://andersonmalheiro.semaphoreci.com/badges/gh-finder/branches/master.svg?style=shields)](https://andersonmalheiro.semaphoreci.com/projects/gh-finder)
+- SemaphoreCI - [![Build Status](https://andersonmalheiro.semaphoreci.com/badges/gh-finder/branches/main.svg)](https://andersonmalheiro.semaphoreci.com/projects/gh-finder)
 
 ## Instruções
 Instruções de como executar o projeto:
