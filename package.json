@@ -32,9 +32,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint **/*.{ts,tsx,js,jsx,css,scss}",
-    "fix": "prettier **/*.{ts,tsx,js,jsx,css,scss} --write",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "fix": "prettier **/*.{ts,tsx,js,jsx,css,scss} --write"
   },
   "eslintConfig": {
     "extends": [
@@ -62,7 +60,6 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
-    "cypress": "^6.6.0",
     "eslint": "^7.21.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.1.0",

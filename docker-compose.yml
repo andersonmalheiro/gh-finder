@@ -1,11 +1,25 @@
 version: "3.4"
 
 services:
-  gh-finder:
-    image: gh-finder
+  frontend:
+    image: frontend
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - "3000:3000"
+      - "8080:80"
     restart: always
+
+  e2e:
+    image: cypress
+    build:
+      context: .
+      dockerfile: ./Dockerfile.e2e
+    container_name: e2e-cypress
+    depends_on:
+      - frontend
+    environment:
+      - CYPRESS_baseUrl=http://frontend
+    command: npx cypress run
+    networks:
+      - default
