@@ -63,20 +63,20 @@ npm run test
 # ou
 yarn test
 ```
-## Testes E2E
+## Testes E2E / Docker
 
-Para executar os testes E2E é necessário que a aplicação esteja sendo executada. Tendo isso em mente, utilize os seguintes comandos para executar os testes:
+Os testes E2E foram implementados utilizando Cypress. Para isso foi feita uma imagem docker específica para a execução dos mesmos.
+Com isso, para executá-los é necessário ter o projeto rodando com docker, com os seguintes comandos:
 
 ```bash
-npm run cypress:run
-# ou
-yarn cypress:run
+## Este comando executa a imagem do front, que ficará disponível em http://localhost:8080
+
+docker-compose up frontend
 ```
-
-## Docker
-
-Para executar o projeto utilizando o Docker, execute o seguinte comando:
+Em seguida utilize o seguinte comando para executar os testes:
 
 ```bash
-docker-compose up
+## Este comando executa a imagem de testes
+
+docker-compose up e2e
 ```
