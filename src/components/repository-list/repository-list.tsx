@@ -55,12 +55,14 @@ export const RepositoryList = (props: RepositoryListProps) => {
                 <FlexColumn>
                   {repo.selected ? (
                     <FaHeart
+                      data-testid="like_button"
                       color="#f44336"
                       style={{ cursor: 'pointer' }}
                       onClick={onClickCard ? () => onClickCard(repo) : () => {}}
                     />
                   ) : (
                     <FaRegHeart
+                      data-testid="like_button"
                       style={{ cursor: 'pointer' }}
                       onClick={onClickCard ? () => onClickCard(repo) : () => {}}
                     />

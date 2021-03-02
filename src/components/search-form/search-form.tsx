@@ -39,6 +39,7 @@ export const SearchForm = (props: SearchFormProps = { inline: false }) => {
           <AppButton
             text="Search"
             type="submit"
+            data-testid="submit_search"
             styling="primary"
             disabled={!values.username}
             loading={loading}
@@ -58,6 +59,7 @@ export const SearchForm = (props: SearchFormProps = { inline: false }) => {
           <AppButton
             text="Search"
             type="submit"
+            data-testid="submit_search"
             styling="primary"
             disabled={!values.username}
             loading={loading}

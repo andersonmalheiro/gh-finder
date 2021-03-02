@@ -26,6 +26,7 @@ export const Drawer = (props: DrawerProps) => {
   return (
     <>
       <Container
+        data-testid="drawer"
         style={{
           width: open ? '350px' : '0',
           padding: open ? '1em' : '0',
@@ -35,7 +36,7 @@ export const Drawer = (props: DrawerProps) => {
           <>
             <FlexRow aligment="center" justify="space-between">
               <h1>{title}</h1>
-              <GhostBtn onClick={toggleDrawer}>
+              <GhostBtn data-testid="close_drawer" onClick={toggleDrawer}>
                 <MdClose size={30} />
               </GhostBtn>
             </FlexRow>
