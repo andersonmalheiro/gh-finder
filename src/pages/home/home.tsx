@@ -99,7 +99,7 @@ export const Home = () => {
 
   return (
     <>
-      <FloatingBtn onClick={toggleDrawer}>
+      <FloatingBtn onClick={toggleDrawer} data-testid="toggle_drawer">
         <FaCodeBranch color="#fff" size={20} />
         <span className="text">My fav repos</span>
       </FloatingBtn>
@@ -109,6 +109,7 @@ export const Home = () => {
             <SearchForm inline={formInline} />
             {data && (
               <AppButton
+                data-testid="clear_search"
                 onClick={clear}
                 text="Clear search"
                 icon={<FaTrash color="#393ac5" size={15} />}
