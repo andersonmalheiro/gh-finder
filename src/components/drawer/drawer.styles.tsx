@@ -15,6 +15,7 @@ export const Container = styled.div`
   overflow: hidden;
   overflow-y: auto;
   transition: all 0.3s ease-in-out;
+  z-index: 1100;
 
   h1 {
     margin: 0;

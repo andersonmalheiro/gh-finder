@@ -32,6 +32,7 @@ export const FloatingBtn = styled(GhostBtn)`
   background: #393ac5;
   color: #fff;
   padding: 10px;
+  z-index: 1000;
 
   &:hover {
     border: none;

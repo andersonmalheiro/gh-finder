@@ -6,6 +6,7 @@ import { Input } from 'components/inputs';
 import { useForm } from 'hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadData, userSelector } from 'store/reducers/usersSlice';
+import { FaSearch } from 'react-icons/fa';
 
 interface SearchFormProps {
   inline?: boolean;
@@ -26,7 +27,7 @@ export const SearchForm = (props: SearchFormProps = { inline: false }) => {
   return (
     <Form onSubmit={handleSubmit}>
       {inline ? (
-        <FlexRow gap="10px">
+        <FlexRow gap="10px" aligment="center">
           <Input
             id="username"
             name="username"
@@ -41,6 +42,7 @@ export const SearchForm = (props: SearchFormProps = { inline: false }) => {
             styling="primary"
             disabled={!values.username}
             loading={loading}
+            icon={<FaSearch color="#fff" size={15} />}
           />
         </FlexRow>
       ) : (
@@ -59,6 +61,7 @@ export const SearchForm = (props: SearchFormProps = { inline: false }) => {
             styling="primary"
             disabled={!values.username}
             loading={loading}
+            icon={<FaSearch color="#fff" size={15} />}
           />
         </FlexColumn>
       )}
