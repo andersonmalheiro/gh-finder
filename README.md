@@ -1,46 +1,73 @@
-# Getting Started with Create React App
+# Github Finder.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Encontre usuários do Github.
 
-## Available Scripts
+## Descrição
 
-In the project directory, you can run:
+Projeto criado utilizando:
 
-### `yarn start`
+- React JS;
+- Styled components;
+- ESLint + Prettier + Styleguide Airbnb;
+- React Leaflet + Mapbox;
+- Redux Toolkit;
+- Testes com Jest;
+- Docker.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Instruções
+Instruções de como executar o projeto:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `yarn test`
+Instale as dependências:
+```bash
+npm install
+# ou
+yarn
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Antes de executar o projeto, crie na raiz dele um arquivo `.env.local` e adicione as seguintes variáveis de ambiente:
 
-### `yarn build`
+```
+## Chaves da API da Marvel
+REACT_APP_GITHUB_KEY=<chave do Github>
+REACT_APP_MAPS_KEY=<chave do Mapbox>
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Para o mapa foi utilizado o [Mapbox](https://www.mapbox.com/). Então para testar localmente será necessário criar uma conta nele e obter a chave necessária para preencher o arquivo `.env.local`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
+Para executar o projeto em modo de desenvolvimento, execute o seguinte comando:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+# ou
+yarn start
+```
 
-### `yarn eject`
+O projeto será ficará disponível no endereço [http://localhost:3000](http://localhost:3000).
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Para executar uma build de produção, utilize os seguintes comandos:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+# ou
+yarn build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Testes
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Para executar os testes unitários, utilize os seguintes comandos:
 
-## Learn More
+```bash
+npm run test
+# ou
+yarn test
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Docker
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Para executar o projeto utilizando o Docker, execute o seguinte comando:
+
+```bash
+docker-compose up
+```
