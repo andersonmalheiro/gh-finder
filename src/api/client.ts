@@ -18,5 +18,5 @@ httpClient.interceptors.request.use(
     value.headers.Authorization = useAuth();
     return value;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
