@@ -43,7 +43,11 @@ export const userSlice = createSlice({
     likeRepo: (state, action) => {
       const favIds = state.myStarredRepos.map((r) => r.id);
       if (!favIds.includes(action.payload.id)) {
-        state.myStarredRepos = [...state.myStarredRepos, action.payload];
+        const { selected, ...rest } = action.payload;
+        state.myStarredRepos = [
+          ...state.myStarredRepos,
+          { selected: true, ...rest },
+        ];
         state.userStarredRepos = state.userStarredRepos.map((repo) => {
           if (repo.id === action.payload.id) {
             repo.selected = true;
